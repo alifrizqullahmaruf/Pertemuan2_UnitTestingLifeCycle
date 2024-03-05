@@ -32,13 +32,15 @@ public class Student {
     }
 
     public void setGrade(String course, String grade) {
-        courseGrades.put(course , "C");
+        courseGrades.put(course , grade);
     }
 
     public String getGrade(String course) {
         for (String coursename: courseGrades.keySet()) {
-            if (coursename==course){
-
+            if (coursename.equals(course)){
+//                System.out.println(courseGrades.values());
+//                System.out.println(courseGrades.keySet());
+                return courseGrades.get(coursename);
             }
         }
         return null;

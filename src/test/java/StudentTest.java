@@ -1,48 +1,63 @@
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StudentTest {
+    private List<Student> students;
 
-    Student student;
+    @BeforeAll
+    public void initClass() {
+        students = new ArrayList<>();
+        System.out.println("BeforeALl");
+    }
 
     @BeforeEach
-    void initClass() {
-        student = new Student("John", 20);
-        System.out.println("Before class di jalanakan");
+    public void initMethod() {
+        Student student1 = new Student("John", 20);
+        Student student2 = new Student("Alice", 22);
+        students.add(student1);
+        students.add(student2);
+        System.out.println("BeforeEach");
     }
 
     @AfterEach
-    void cleanClass() {
-        student = null;
+    public void cleanMethod() {
+        students.clear();
+        System.out.println("AfterEach");
+    }
+
+    @AfterAll
+    public void cleanClass() {
+        System.out.println("AfterAll");
     }
 
     @Test
-    void testDataCreation() {
-        assertNotNull(student);
-        assertEquals("John", student.getName());
-        assertEquals(20, student.getAge());
+    public void testMethod1TestDataCreation() {
+        assertNotNull(students);
+        assertEquals(2, students.size());
     }
 
     @Test
-    void testStudentEnrolment() {
+    public void testMethod2TestStudentEnrolment() {
+        Student student = students.get(0);
         student.enrollCourse("Math");
         student.enrollCourse("Physics");
-        List<String> enrolledCourses = student.getEnrolledCourses();
-        assertNotNull(enrolledCourses);
-        assertEquals(2, enrolledCourses.size());
-        assertTrue(enrolledCourses.contains("Math"));
-        assertTrue(enrolledCourses.contains("Physics"));
+        assertEquals(2, student.getEnrolledCourses().size());
+        assertEquals("Math", student.getEnrolledCourses().get(0));
+        assertEquals("Physics", student.getEnrolledCourses().get(1));
     }
 
     @Test
-    void testStudentGrade() {
-        student.enrollCourse("Math");
+    public void testMethod3TestStudentGrade() {
+        Student student = students.get(0);
         student.setGrade("Math", "A");
+        student.setGrade("Physics", "B");
         assertEquals("A", student.getGrade("Math"));
+        assertEquals("B", student.getGrade("Physics"));
     }
 }
